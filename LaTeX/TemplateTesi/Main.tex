@@ -1,0 +1,71 @@
+\documentclass[12pt,twoside, openright]{report}
+
+\usepackage{Preambole}  % per caricare il preambolo dal file "Preambole.sty" alleggerendo il documento
+
+% \includeonly{Head/Abstract/Abstract} %per includere solamente il capitolo che mi interessa rivedere (scrivere l'intero indirizzo)
+% \includeonly{Body/Introduction/Introduction}
+% \includeonly{Body/Projects/Projects}
+% \includeonly{Body/Conclusions/Conclusions}
+% \includeonly{Tail/Appendix/Appendix}
+% per ultima compilazione controllare di aver scommentato tutto il necessario
+
+\begin{document}
+\emergencystretch 2em  % aumenta il limite per lo stretching delle parole, in modo da permettere che una parola venga mandata a capo anche se la riga rimarrebbe con le parole molto allargate (dicono sia meglio usare questo che sloppy)
+% %per inserire una pagina (due facciate) vuote, Messa perchè sta bene una pagina bianca dopo la copertina (non so perchè clearpage... non funziona)
+% \newpage
+% \thispagestyle{empty}
+% \mbox{}
+% \newpage
+% \thispagestyle{empty}
+% \mbox{}
+
+\includepdf{Frontespizio/Frontespizio.pdf}
+\clearpage{\pagestyle{empty}\cleardoublepage}  % per aggiungere una pagina vuota (se questa è dispari ne aggiunge un'altra ancora)
+
+\include{Head/Dedica/Dedica}
+
+\pagenumbering{Roman}
+
+\include{Head/Abstract/Abstract}
+
+\include{Head/TOCandLists/TOCandLists}
+
+\pagenumbering{arabic}
+
+\setcounter{chapter}{-1}  % per partire numerazione capitoli da zero (e non da uno)
+
+% ripetere formattazione header preabole sospesa per abstract
+
+\fancyhf{}  % cancella tutti i campi
+\fancyhead[LE]{\leftmark}  % a quanto pare questi comandi devono essere separati altrimenti fa casino
+\fancyhead[RO]{\rightmark}  %
+\fancyfoot[LE,RO]{\thepage}  %
+
+\include{Body/Introduction/Introduction}
+
+\include{Body/Projects/Projects}
+
+\include{Body/Conclusions/Conclusions}
+
+\include{Tail/References/References}
+
+\include{Tail/Appendix/Appendix}
+
+\include{Tail/Acknowledgments/Acknowledgments}
+% \newpage  % per aggiungere pagina vuota
+% \thispagestyle{empty}
+% \vspace*{\fill}
+% \clearpage{\pagestyle{empty}\cleardoublepage}  % per aggiungere una pagina vuota (se questa è dispari ne aggiunge un'altra ancora)
+
+% %per inserire una pagina (due facciate) vuote, Messa perchè sta bene una pagina bianca subito prima della copertina (non so perchè clearpage... non funziona)
+% \newpage
+% \thispagestyle{empty}
+% \mbox{}
+% \newpage
+% \thispagestyle{empty}
+% \mbox{}
+
+\listofchanges[title={ToDos, Changes...}]  % per avere un elenco di tutti i commenti e i cambiamenti fatti (quando nel preambolo metto final e non draft non compare)
+
+\end{document}
+

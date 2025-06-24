@@ -1,0 +1,222 @@
+\usepackage[italian, english]{babel}
+\usepackage[T1]{fontenc}  % codifica dei font in uscita
+\usepackage[utf8]{inputenc}  % lettere accentate da tastiera
+\usepackage{fancyhdr}
+% \usepackage[a4paper, heightrounded, includeheadfoot, bindingoffset=20mm, tmargin=20mm, bmargin=20mm, footskip=10mm, showframe]{geometry}
+\usepackage[a4paper, heightrounded, includeheadfoot, bindingoffset=6mm, margin=30mm, footskip=10mm, headheight=15pt]{geometry}
+\linespread{1.25}  % interlinea
+% \usepackage{times}  % Times New Roman, default = Computer Modern
+\usepackage{tgtermes}  % Open source alternative to Times New Roman, default = Computer Modern
+% \usepackage{helvet}  % Helvetica, default = Computer Modern
+\usepackage{tgheros}  % Open source alternative to Helvetica, default = Computer Modern
+% \usepackage{ebgaramond}  % Open source Garamond
+
+\usepackage{indentfirst}
+
+\usepackage{emptypage}  % empty pages are blank, così è coerente con le parti
+
+\usepackage{array}  % per avere più libertà di impostazioni con le tabelle
+\newcolumntype{?}{!{\vrule width 1pt}} % per poter fare linea verticale più grossa usando ? al posto di |
+\usepackage{enumitem}  % per variare impostazioni itemize e enumerate
+\setlist[itemize]{parsep=0.25em}
+\setlist[enumerate]{parsep=0.25em}
+\setlist[description]{parsep=0.25em}
+\usepackage[bottom, hang]{footmisc}  % per poter fare due riferimenti alla stessa footnote (hang per evitare indent in footnote)
+\usepackage{perpage}
+\MakePerPage{footnote}  % questo e il precedente sono per far azzerare le note a piè di pagina ad ogni pagina
+\usepackage{graphicx}  % per includere img raster usare estensione .eps
+\graphicspath{{Images/}}  % per far riconoscere in automatico la posizione delle immagini, senza dover scrivere ogni volta il path
+% \usepackage[dvipsnames, table]{xcolor}
+% \rowcolors{2}{}{gray!10}  % per avere colori alternati nelle righe delle tabelle
+\usepackage{makecell}  % per poter avere celle con più linee (\thead e \makecell)
+\renewcommand\theadfont{\bfseries}  % per avere theads in grassetto
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{wasysym}
+\usepackage{euscript}  % nice looking \mathcal letters
+\usepackage{bm}  % for vector and matrix bold notation
+\newcommand{\vect}[1]{\bm{#1}}  % for vector notation changing it here changes the entire document
+\newcommand{\matr}[1]{\bm{#1}}  % for matrix notation changing it here changes the entire document
+\newcommand{\set}[1]{\EuScript{#1}}  % for matrix notation changing it here changes the entire document
+\usepackage{calrsfs}  % per mathcal più fancy
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}  % like \mathcal but for lowercase letters
+\usepackage[normalem]{ulem}  % for strike out text
+\usepackage{latexsym}
+\usepackage{amsthm}
+\usepackage{pdfpages}
+
+\usepackage[hidelinks, pdfauthor={}, pdftitle={}, pdfsubject={}, pdfkeywords={}, pdfcreator="LaTeX"]{hyperref}  % per permettere i collegamenti ipertestuali interni al documento (non cambia la formattazione) e aggiungere info al file (giusto per fare tutto per bene)
+
+\usepackage[citestyle=numeric-comp, autocite=inline, bibstyle=nature, backend=biber, articletitle=true, doi=true, isbn=false, url=true, eprint=false, maxbibnames=10, maxnames=3, minnames=1, sorting=none]{biblatex}  % package per bibliografia, usare \autocite per citare (max e min sono impostati come default, ma li ho messi in chiaro se volessi cambiarli)
+% biblatex docs https://ctan.mirror.garr.it/mirrors/ctan/macros/latex/contrib/biblatex/doc/biblatex.pdf
+% bibstyles https://www.overleaf.com/learn/latex/Biblatex_bibliography_styles  [chem-acs, nature, ieee]
+\addbibresource{Tail/References/References.bib}  % definizione file contenente tutte info per bibliografia
+
+\usepackage[nameinlink, noabbrev]{cleveref}  % per avere riferimenti più belli, per scrivere sempre la prima lettera maiuscola [capitalize] (solo quando serve si usa \Cref) link anche per nome (figure, eq...) e non usa abbreviazioni (figure e non fig, equazione e non eq)
+%\setcounter{secnumdepth}{3}  % per avere riferimenti anche alle sottosezioni
+
+\crefdefaultlabelformat{#2\textup{#1}#3}  % per impostazioni particolari riferimenti (parentesi, grassetto (upshape controlla che non ci siano strane formattazioni come corsivo o grassetto) per togliere le parentesi basta cancellare le parentesi tonde da qui...
+%per adesso per richiamare equazioni uso normale comando \ref
+
+
+\usepackage[font={scriptsize,sf}, labelfont={bf}, tableposition=top, margin=1cm, labelsep=period]{caption}  % per modificare impostazioni didascalie (font=sans serif)
+
+\usepackage[version=4]{mhchem}  % per scrivere reazioni chimiche particolari
+
+\usepackage{csquotes}
+
+
+\usepackage{xurl}
+\urlstyle{same}  % per tenere stesso font (e non monospace) quando scrivo urls
+
+%\oddsidemargin=30pt \evensidemargin=20pt  % impostano margini diversi pagine pari e dispari (commentato perchè uso pacchetto geometry che dovrebbe dare un risultato migliore, lo lascio per sicurezza)
+\hyphenation{sil-la-ba-zio-ne}  % nel caso si dovessero inserire parole che latex sillaba in modo scorretto
+\babelhyphenation[english]{iso-tre-ti-no-in}
+\babelhyphenation[english]{trans-for-ma-tion}
+\babelhyphenation[english]{ex-pres-sion}
+\babelhyphenation[english]{hy-dro-gen}  % perchè ho più lingue devo specificare, altrimenti fa casino
+
+\pagestyle{fancy}
+\fancypagestyle{plain}{%
+	\fancyhf{}  % cancella tutti i campi
+	\renewcommand{\headrulewidth}{0pt}  % toglie la riga dell'intestazione nella prima pagina di un capitolo
+	\fancyfoot[LE,RO]{\thepage}  % numeri negli angoli anche nella prima pagina di un capitolo
+	}
+\fancyheadoffset{5mm}  % per fare in modo che header and foot siano più larghi del testo
+\fancyfootoffset{5mm}  % vedi sopra, soprattutto perchè mi piacciono di più i numeri delle pagine
+
+\headwidth=\textwidth  %
+\renewcommand{\headrulewidth}{0.4pt}  %
+\renewcommand{\footrulewidth}{0pt}  %
+	
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter \ \ #1}{}}  % per definire la composizione della scritta che descrive il capitolo nell'header della pagina a destra (la doppia barra èperchè mi piace avere più spazio)
+\renewcommand{\sectionmark}[1]{\markright{\thesection \ \ #1}{}}  % idem per la sezione ma a sinistra
+
+\fancyhf{}  % cancella tutti i campi
+\fancyhead[RO]{\righmark}  % a quanto pare questi comandi devono essere separati altrimenti fa casino
+\fancyhead[LE]{\rightmark}  %
+\fancyfoot[LE,RO]{\thepage}  %
+
+% all the following è per avere # Titolo capitolo e non su righe diverse
+\makeatletter
+    \renewcommand{\@makechapterhead}[1]{%
+    % \vspace*{10pt}  % Space from the top of the text block to the word Chapter; default is 50pt.
+    {\setlength{\parindent}{0pt} \raggedright \normalfont
+    \bfseries\Huge\thechapter\ \ #1
+    \par\nobreak\vspace{20pt}  % Space between the chapter title and the chapter body text; default is 40pt.
+    }}
+\makeatother
+
+% stessa cosa ma per capitoli non in TOC (quelli con l'asterisco)
+\makeatletter
+    \renewcommand{\@makeschapterhead}[1]{%
+    % \vspace*{10pt}  % Space from the top of the text block to the word Chapter; default is 50pt.
+    {\setlength{\parindent}{0pt} \raggedright \normalfont
+    \bfseries\Huge #1
+    \par\nobreak\vspace{20pt}  % Space between the chapter title and the chapter body text; default is 40pt.
+    }}
+\makeatother
+
+\setcounter{secnumdepth}{3} % per mostrare numeri in subsubsection
+% \setcounter{tocdepth}{4} % per cambiare numero massimo di sottolivelli mostrati in toc
+
+% per creare un nuovo comando per creare tabelle con diverso allineamento test e larghezza fissa (da definire), sempre sentrato verticalmente
+\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}}  % centrato
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}m{#1}}  % sinistra
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}m{#1}}  % destra
+
+% per avere note a piè di pagina con simbolo o lettera come riferimento (standard numero, ma potrebbe confondersi con le citazioni)
+% \renewcommand{\thefootnote}{\alph{footnote}}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\interfootnotelinepenalty=10000  % per evitare che vengano separate su più pagine
+
+% per ridurre il font della bibliografia (altrimenti viene più lunga della tesi
+\renewcommand*{\bibfont}{\scriptsize}
+
+% per permettere alle tabelle di essere separate su più pagine
+\usepackage{longtable}
+
+% per poter fare celle che occupano più righe (tipo due righe unite)
+\usepackage{multirow}
+
+\usepackage{nicematrix}
+\usepackage{tabularx}
+\usepackage{booktabs}
+
+% per variare la percentuale permessa di pagina usata da una figura con testo (altrimenti sopra al 70% mette la figura da sola su una pagina)
+\renewcommand{\topfraction}{.75}
+\renewcommand{\bottomfraction}{.3}
+
+% per mettere subfigure
+\usepackage{subfig}
+% per poterle allineare verticalmente
+\usepackage[export]{adjustbox}
+
+% per avere frazioni in diagonale (infatti usate spesso per unità di misura)
+\usepackage{xfrac}
+
+% per citazioni inizio capitoli
+\usepackage{epigraph}
+\setlength\epigraphwidth{.75\textwidth}
+\setlength\epigraphrule{0pt}
+\renewcommand{\epigraphsize}{\small}
+
+% per poter fare integrali più grandi
+\usepackage{bigints}
+
+% per poter scrivere le lettere greche anche fuori da mathmode
+\usepackage[euler]{textgreek}
+
+% per mettere "Table of Contents" al posto di "Contents" nel titolo dell'indice
+\addto\captionsenglish{
+  \renewcommand{\contentsname}
+    {Table of Contents}  % ToC will show "Table of Contents" instead of "Content"
+}
+
+\usepackage{svg}  % per poter inserire anche svg
+
+%  Appendix settings
+\usepackage[]{appendix}  % toc, page
+% Redefine the label format for appendices
+\Crefname{appsec}{Appendix}{Appendices}
+\crefname{appsec}{appendix}{appendices}
+
+% verbatim appendix
+\usepackage{fancyvrb}
+
+% Set the spacing between paragraphs
+\usepackage[indent]{parskip}
+% \setlength{\parskip}{0.25ex plus 0.01ex minus 0.01ex}
+\setlength{\parskip}{1em plus 0.5em minus 0.5em}
+\raggedbottom
+
+\usepackage{tikz}
+\newcommand{\xmark}{%
+\tikz[scale=0.23] {
+    \draw[line width=0.7,line cap=round] (0,0) to [bend left=6] (1,1);
+    \draw[line width=0.7,line cap=round] (0.2,0.95) to [bend right=3] (0.8,0.05);
+}}
+\newcommand{\cmark}{%
+\tikz[scale=0.23] {
+    \draw[line width=0.7,line cap=round] (0.25,0) to [bend left=10] (1,1);
+    \draw[line width=0.8,line cap=round] (0,0.35) to [bend right=1] (0.23,0);
+}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%                                       DRAFTS
+%              commentare questa parte prima di generate il file finale
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \usepackage{draftwatermark}  % per watermark
+% \SetWatermarkText{DRAFT}  % default DRAFT
+% \SetWatermarkColor[gray]{0.975}  % impostare grigio più chiaro in modo da evitare che complichi troppo la lettura
+% \usepackage{lipsum}  % solo per inserire lorem ipsum per vedere come sta il testo
+% \usepackage{lineno}  % per avere numero linee, utile per drafting
+% \linenumbers
+% \usepackage{showkeys}  % mostra le label per review
+
+% \usepackage{todonotes}
+\usepackage[final, defaultcolor=red]{changes}  % per commenti sostituzioni... sostituire draft con final per rimuoverle tutte
+\usepackage{marginnote}\let\marginpar\marginnote  % allows to use the changes-package in figure, table and the abstractbox environments

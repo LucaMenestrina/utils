@@ -1,0 +1,72 @@
+\documentclass [12pt,a4paper]{report}
+\usepackage{geometry} %pacchetto per poter impostare i margini
+\geometry{top=2cm, bottom=2cm} %impostazione margine superiore e inferiore
+\usepackage[italian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{times} %font
+\usepackage{setspace}  % per interlinea e simili
+\usepackage{svg}  % per poter inserire anche svg
+\usepackage{graphicx}
+\textwidth450pt %larghezza del testo/documento
+\oddsidemargin=0pt %non aggiunge margine a quello standard per le pagine dispari
+\begin{document}
+\begin{titlepage}
+	\begin{center}
+        \includegraphics[width=3cm]{Images/logo_unibo} \\
+        \vspace{1mm}
+	{\Large{\textsc{Alma Mater Studiorum $\cdot$ Università di Bologna}}}
+	\rule [0.1cm]{15.8cm}{0.2mm}
+	\rule [0.6cm] {15.8cm}{0.35mm}
+	{\Large{DOTTORATO DI RICERCA IN} \\
+        \vspace{2mm}
+        \Large{DATA SCIENCE AND COMPUTATION}} \\
+        \vspace{2.5mm}
+        {\large{Ciclo XXXV}}
+	\end{center}
+        \vspace{7.5mm}
+        \begin{description}
+            \normalsize{
+                \item[Settore Concorsuale:] 03/D1 - Chimica e Tecnologie Farmaceutiche, \\ Tossicologiche e Nutraceutico-alimentari \\[-5mm]
+                \item[Settore Scientifico Disciplinare:] CHIM/08 - Chimica Farmaceutica \\
+            }
+        \end{description}
+	\vspace{10mm}
+	\begin{center}
+        \onehalfspacing
+        \LARGE{\textbf{}}
+	\end{center}
+\vspace{20mm}
+
+\noindent
+\begin{flushleft}
+        \doublespacing
+        \large{\textbf{\strut{Presentata da:}} } \\
+	% \normalsize{\textbf{\strut{Matricola: }}}
+\end{flushleft}
+\vspace{2.5mm}
+\begin{minipage}[t]{0.45\textwidth}
+	\begin{flushleft}
+        \onehalfspacing
+	\large{\textbf{\strut{Coordinatore Dottorato}}\\
+        \strut{Prof. }}
+	\end{flushleft}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.4\textwidth}
+	\begin{flushleft}
+	\onehalfspacing
+        \large{\textbf{\strut{Supervisore}}\\
+        \strut{Prof. }}\\
+        \vspace{5mm}
+        \large{\textbf{\strut{Co-supervisore}}\\
+        \strut{Prof. }}
+	\end{flushleft}
+\end{minipage}
+\vspace{7.5mm}
+\begin{center}
+	{\large{Esame Finale Anno 2024}}
+	\rule [0.1cm]{15.8cm}{0.2mm}
+\end{center}
+\end{titlepage}
+\end{document} 

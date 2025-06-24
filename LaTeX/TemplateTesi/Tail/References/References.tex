@@ -1,0 +1,11 @@
+\part{References}  % references al posto di bibliography (più corretto https://apastyle.apa.org/style-grammar-guidelines/references/lists-vs-bibliographies)
+
+\begingroup
+
+\renewcommand\bibname{}  % tolto il titolo perchè è già scritto in una pagina a parte
+\phantomsection\label{ch:references}
+\printbibliography[]  % Crea e stampa la bibliografia (e la aggiunge all'indice) Prende info da Bibliography.bib  % heading=bibintoc
+
+\endgroup
+
+% \clearpage{\pagestyle{plain}\cleardoublepage}  % per aggiungere una pagina vuota (se questa è dispari ne aggiunge un'altra ancora)
