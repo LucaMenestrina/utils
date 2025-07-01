@@ -33,6 +33,15 @@ except ImportError:
 LogLevel = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 DEFAULT_LOG_FOLDER = "logs"
+DATEFMT: Optional[str] = "%Y-%m-%d %H:%M:%S"
+
+class ContextFormatter(logging.Formatter):
+    def format(self, record):
+        filename = record.pathname.split(os.sep)[-1]
+        func = record.funcName or "main"
+        context = f"[{filename}:{func}]"
+        record.msg = f"{context} {record.getMessage()}"
+        return super().format(record)
 
 class logger():
     """
@@ -47,8 +56,6 @@ class logger():
         name: str,
         folder: str = DEFAULT_LOG_FOLDER,
         filemode: Literal["a", "w"] = "a",
-        messagefmt: str = "%(asctime)s # %(levelname)s # %(message)s",
-        datefmt: Optional[str] = "%Y-%m-%d %H:%M:%S",
         console_level: Optional[LogLevel] = "INFO",
         file_level: Optional[LogLevel] = "DEBUG",
         use_color: bool = False,
@@ -62,8 +69,6 @@ class logger():
             name: Name of the logger, also used as part of the logfile name.
             folder: Directory for log files.
             filemode: File mode for logging, either 'a' (append) or 'w' (overwrite).
-            messagefmt: Log message format.
-            datefmt: Date format for log timestamps.
             console_level: Logging level for console output.
             file_level: Logging level for file output.
             use_color: Whether to colorize console output (requires colorama).
@@ -109,18 +114,20 @@ class logger():
             self.filemode = filemode
             self.use_color = use_color and _COLORAMA_AVAILABLE
             self.json_log = json_log
+            self.datefmt = DATEFMT
 
             self._logger_name = f"{name}:{os.path.abspath(folder)}"
             self.logger = logging.getLogger(self._logger_name)
             self.logger.setLevel(logging.DEBUG)
             self.logger.propagate = False
 
-            formatter = logging.Formatter(messagefmt, datefmt)
+            self.__console_fmt = logging.Formatter("%(levelname)s: %(message)s", self.datefmt)
+            self.__file_fmt = ContextFormatter("%(asctime)s # %(levelname)s: %(message)s", self.datefmt)
 
             if console_level:
                 ch = logging.StreamHandler(sys.stdout)
                 ch.setLevel(console_level.upper())
-                ch.setFormatter(self._color_formatter(formatter) if self.use_color else formatter)
+                ch.setFormatter(self._color_formatter(self.__console_fmt) if self.use_color else self.__console_fmt)
                 self.logger.addHandler(ch)
 
             if file_level:
@@ -133,7 +140,7 @@ class logger():
                     encoding="utf-8"
                 )
                 fh.setLevel(file_level.upper())
-                fh.setFormatter(self._json_formatter() if json_log else formatter)
+                fh.setFormatter(self._json_formatter() if json_log else self.__file_fmt)
                 self.logger.addHandler(fh)
 
     def _get_context(self):
@@ -155,9 +162,6 @@ class logger():
                     func = "main"
                 return f"{filename}:{func}"
         return "unknown:unknown"
-
-    def _format_message(self, msg: str) -> str:
-        return f"[{self._get_context()}] {msg}"
 
     def _append_traceback(self, msg: str) -> str:
         tb = traceback.format_exc()
@@ -194,8 +198,8 @@ class logger():
 
         return ColorizingFormatter(base_formatter._fmt, base_formatter.datefmt)
 
-    def _json_formatter(self) -> logging.Formatter:
-        class JsonFormatter(logging.Formatter):
+    def _json_formatter(self) -> ContextFormatter:
+        class JsonFormatter(ContextFormatter):
             def format(self, record):
                 payload = {
                     "timestamp": self.formatTime(record, self.datefmt),
@@ -210,22 +214,22 @@ class logger():
         return JsonFormatter()
 
     def debug(self, msg: str):
-        self.logger.debug(self._format_message(msg))
+        self.logger.debug(msg)
 
     def info(self, msg: str):
-        self.logger.info(self._format_message(msg))
+        self.logger.info(msg)
 
     def warning(self, msg: str):
         msg = self._append_traceback(msg)
-        self.logger.warning(self._format_message(msg))
+        self.logger.warning(msg)
 
     def error(self, msg: str):
         msg = self._append_traceback(msg)
-        self.logger.error(self._format_message(msg))
+        self.logger.error(msg)
 
     def critical(self, msg: str):
         msg = self._append_traceback(msg)
-        self.logger.critical(self._format_message(msg))
+        self.logger.critical(msg)
         raise SystemExit(f"CRITICAL ERROR: {msg}")
 
     def setLevel(self, console: Optional[LogLevel] = None, file: Optional[LogLevel] = None):
