@@ -35,13 +35,23 @@ LogLevel = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 DEFAULT_LOG_FOLDER = "logs"
 DATEFMT: Optional[str] = "%Y-%m-%d %H:%M:%S"
 
-class ContextFormatter(logging.Formatter):
-    def format(self, record):
-        filename = record.pathname.split(os.sep)[-1]
-        func = record.funcName or "main"
-        context = f"[{filename}:{func}]"
-        record.msg = f"{context} {record.getMessage()}"
-        return super().format(record)
+# For adding context to all logs
+old_factory = logging.getLogRecordFactory()
+LOGGER_FILENAME = os.path.basename(__file__)
+def find_external_caller():
+    for frame_info in inspect.stack():
+        filename = os.path.basename(frame_info.filename)
+        if filename != LOGGER_FILENAME and "logging" not in frame_info.filename:
+            func = frame_info.function
+            if func == "<module>":
+                func = "main"
+            return f"[{filename}:{func}]"
+    return "[unknown:unknown]"
+def record_factory(*args, **kwargs):
+    record = old_factory(*args, **kwargs)
+    record.context = find_external_caller()
+    return record
+logging.setLogRecordFactory(record_factory)
 
 class logger():
     """
@@ -122,7 +132,7 @@ class logger():
             self.logger.propagate = False
 
             self.__console_fmt = logging.Formatter("%(levelname)s: %(message)s", self.datefmt)
-            self.__file_fmt = ContextFormatter("%(asctime)s # %(levelname)s: %(message)s", self.datefmt)
+            self.__file_fmt = logging.Formatter("%(asctime)s # %(levelname)s: %(context)s %(message)s", self.datefmt)
 
             if console_level:
                 ch = logging.StreamHandler(sys.stdout)
@@ -142,26 +152,6 @@ class logger():
                 fh.setLevel(file_level.upper())
                 fh.setFormatter(self._json_formatter() if json_log else self.__file_fmt)
                 self.logger.addHandler(fh)
-
-    def _get_context(self):
-        stack = inspect.stack()
-        for frame in stack:
-            mod = inspect.getmodule(frame.frame)
-            if mod and mod.__name__ != __name__:
-                # External caller
-                filename = os.path.basename(frame.filename)
-                func = frame.function
-                if func == "<module>":
-                    func = "main"
-                return f"{filename}:{func}"
-            elif frame.function not in {"debug", "info", "warning", "error", "critical", "_format_message", "_get_context"}:
-                # Fallback: skip internal logger functions
-                filename = os.path.basename(frame.filename)
-                func = frame.function
-                if func == "<module>":
-                    func = "main"
-                return f"{filename}:{func}"
-        return "unknown:unknown"
 
     def _append_traceback(self, msg: str) -> str:
         tb = traceback.format_exc()
@@ -198,9 +188,12 @@ class logger():
 
         return ColorizingFormatter(base_formatter._fmt, base_formatter.datefmt)
 
-    def _json_formatter(self) -> ContextFormatter:
-        class JsonFormatter(ContextFormatter):
+    def _json_formatter(self) -> logging.Formatter:
+        class JsonFormatter(logging.Formatter):
             def format(self, record):
+                filename = os.path.basename(record.pathname)
+                func = record.funcName or "main"
+                context = f"{filename}:{func}"
                 payload = {
                     "timestamp": self.formatTime(record, self.datefmt),
                     "level": record.levelname,
