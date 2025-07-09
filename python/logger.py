@@ -224,6 +224,13 @@ class logger():
         msg = self._append_traceback(msg)
         self.logger.critical(msg)
         raise SystemExit(f"CRITICAL ERROR: {msg}")
+    
+    def exception(self, msg: str = "", exc: BaseException | None = None):
+        if exc is None:
+            exc = sys.exc_info()[1]
+        tb = "".join(traceback.format_exception(type(exc), exc, exc.__traceback__))
+        full_msg = f"{msg}\n{tb}" if msg else tb
+        self.logger.error(full_msg)
 
     def setLevel(self, console: Optional[LogLevel] = None, file: Optional[LogLevel] = None):
         """
