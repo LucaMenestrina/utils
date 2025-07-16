@@ -38,14 +38,16 @@ DATEFMT: Optional[str] = "%Y-%m-%d %H:%M:%S"
 # For adding context to all logs
 old_factory = logging.getLogRecordFactory()
 LOGGER_FILENAME = os.path.basename(__file__)
-def find_external_caller():
-    for frame_info in inspect.stack():
-        filename = os.path.basename(frame_info.filename)
-        if filename != LOGGER_FILENAME and "logging" not in frame_info.filename:
-            func = frame_info.function
+def find_external_caller(skip=2):
+    frame = sys._getframe(skip)
+    while frame:
+        filename = os.path.basename(frame.f_code.co_filename)
+        if filename != LOGGER_FILENAME and "logging" not in frame.f_code.co_filename:
+            func = frame.f_code.co_name
             if func == "<module>":
                 func = "main"
             return f"[{filename}:{func}]"
+        frame = frame.f_back
     return "[unknown:unknown]"
 def record_factory(*args, **kwargs):
     record = old_factory(*args, **kwargs)
@@ -119,8 +121,7 @@ class logger():
 
             self.name = name
             self.folder = folder
-            if not os.path.isdir(self.folder):
-                os.makedirs(self.folder)
+            os.makedirs(self.folder, exist_ok=True)
             self.filemode = filemode
             self.use_color = use_color and _COLORAMA_AVAILABLE
             self.json_log = json_log
@@ -213,7 +214,7 @@ class logger():
         self.logger.info(msg)
 
     def warning(self, msg: str):
-        msg = self._append_traceback(msg)
+        # msg = self._append_traceback(msg)
         self.logger.warning(msg)
 
     def error(self, msg: str):
